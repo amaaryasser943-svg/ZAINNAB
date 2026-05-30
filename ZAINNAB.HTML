@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Message</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:black;
+    overflow:hidden;
+    color:white;
+    font-family:'Poppins',sans-serif;
+    height:100vh;
+}
+
+/* SCREENS */
+.screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.hidden{ display:none; }
+
+.question{
+    color:#ff69b4;
+    font-size:2rem;
+    margin-bottom:30px;
+}
+
+button{
+    padding:12px 28px;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+}
+
+.yes{ background:#ff69b4; color:white; }
+.no{ background:white; color:#ff69b4; }
+
+.buttons{ display:flex; gap:15px; }
+
+/* HEART WRAPPER */
+.heart-wrapper{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    transition:all 4s ease;
+}
+
+/* HEART */
+.heart{
+    width:260px;
+    height:240px;
+    background:white;
+    transform:rotate(-45deg);
+    position:relative;
+    box-shadow:0 0 25px #fff,0 0 60px #fff;
+    animation:beat 0.8s infinite;
+}
+
+.fade-bg .heart{
+    animation:none !important;
+    box-shadow:0 0 10px #fff;
+}
+
+.heart::before,
+.heart::after{
+    content:'';
+    position:absolute;
+    width:260px;
+    height:240px;
+    background:white;
+    border-radius:50%;
+}
+
+.heart::before{ top:-130px; left:0; }
+.heart::after{ left:130px; top:0; }
+
+/* 🔥 SEPARATE LAYER NAME (FIXED) */
+.name-layer{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:999;
+    pointer-events:none;
+}
+
+.name{
+    font-size:3rem;
+    font-weight:700;
+    color:#ff69b4;
+    text-align:center;
+    white-space:nowrap;
+}
+
+/* FADE BACKGROUND */
+.fade-bg{
+    opacity:0.08;
+    transform:translate(-50%,-50%) scale(1.8);
+}
+
+/* MESSAGE */
+.message{
+    position:relative;
+    max-width:800px;
+    font-size:1.8rem;
+    line-height:2;
+    font-family:'Dancing Script',cursive;
+    opacity:0;
+    transition:1s;
+    z-index:5;
+}
+
+.show{ opacity:1; }
+
+/* HEART BEAT */
+@keyframes beat{
+    0%{ transform:rotate(-45deg) scale(1); }
+    50%{ transform:rotate(-45deg) scale(1.12); }
+    100%{ transform:rotate(-45deg) scale(1); }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FIRST -->
+<div id="firstScreen" class="screen">
+    <h1 class="question">You have a secret message.<br>Would you like to view it?</h1>
+    <div class="buttons">
+        <button class="yes" onclick="showHeart()">Yes</button>
+        <button class="no" onclick="noChoice()">No</button>
+    </div>
+</div>
+
+<!-- NO -->
+<div id="noScreen" class="screen hidden">
+    <h1 class="question">You have no choice.<br>You must view the message.</h1>
+    <div class="buttons">
+        <button class="yes" onclick="showHeart()">Yes</button>
+        <button class="no" onclick="noChoice()">No</button>
+    </div>
+</div>
+
+<!-- HEART -->
+<div id="heartScreen" class="screen hidden">
+
+    <div id="heartWrap" class="heart-wrapper">
+        <div class="heart"></div>
+
+        <!-- FIXED SEPARATE LAYER -->
+        <div class="name-layer">
+            <div class="name">ZAINNAB</div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+</div>
+
+<script>
+
+const text = `I'm sorry, my love.
+
+I have never loved anyone the way I love you, and I never will.
+
+I feel like you're still upset with me, and I couldn't think of a better way to make it up to you.
+
+I pray that God brings us together soon in our home.
+
+You are my wife, my sister, my love, my best friend, my little girl, the mother of my future children, and my whole world.
+
+May God keep you by my side forever and always make you my support and everything I have.
+
+Hopefully, we'll be together in our home very soon. ❤️`;
+
+let i = 0;
+
+function typeWriter(){
+    if(i < text.length){
+        document.getElementById("message").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 35);
+    }
+}
+
+function showHeart(){
+    document.getElementById("firstScreen").classList.add("hidden");
+    document.getElementById("noScreen").classList.add("hidden");
+    document.getElementById("heartScreen").classList.remove("hidden");
+
+    setTimeout(()=>{
+        document.getElementById("heartWrap").classList.add("fade-bg");
+    },3000);
+
+    setTimeout(()=>{
+        document.getElementById("message").classList.add("show");
+        typeWriter();
+    },5000);
+}
+
+function noChoice(){
+    document.getElementById("firstScreen").classList.add("hidden");
+    document.getElementById("noScreen").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
